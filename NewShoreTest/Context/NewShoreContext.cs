@@ -6,14 +6,13 @@ namespace NewShoreTest.Context
 {
     public class NewShoreContext : DbContext
     {
-        public DbSet<FlightModel> Flights { get; set; }
-        public DbSet<TransportModel> Transports { get; set; }
-
         public NewShoreContext(DbContextOptions<NewShoreContext> options) : base(options)
         {
 
         }
 
+        public DbSet<FlightModel> Flights { get; set; }
+        public DbSet<TransportModel> Transports { get; set; }   
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -25,7 +24,7 @@ namespace NewShoreTest.Context
         }
     }
 
-    public class Flights
+    public class Flight
     {
         public string Id { get; set; }
         public string DepartureStation { get; set; }

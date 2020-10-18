@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,38 +11,35 @@ using NewShoreTest.Models;
 
 namespace NewShoreTest.Controllers
 {
-    [Route("api/flights")]
-    [ApiController]
+    [Route("api/flights")] 
     public class FlightsController : ControllerBase
     {
-        private readonly NewShoreContext _context;
-        private readonly IWebHostEnvironment _environment;
+        private Context.NewShoreContext db;
 
-        private DbSet<FlightModel> _flightsDbSet;
-
-        public FlightsController(NewShoreContext context, IWebHostEnvironment environment)
+        public FlightsController(Context.NewShoreContext context)
         {
-            _context = context;
-            _environment = environment;
-            _flightsDbSet = context.Set<FlightModel>();
+            db = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<FlightModel>>> GetFlights()
+        public IEnumerable<FlightModel> Flight()
         {
-            return await _flightsDbSet
-                .Include(f => f.Transport)
-                .ToListAsync();
+            List<FlightModel> lst = (from d in db.Flights
+                                     select new FlightModel
+                                     {
+                                         Id = d.Id,
+                                         DepartureDate = d.DepartureDate,
+                                         DepartureStation = d.DepartureStation,
+                                         ArrivalStation = d.ArrivalStation,
+                                         Transport = d.Transport,
+                                         Price = d.Price,
+                                         Currency = d.Currency,
+                                         FkTransporte = d.FkTransporte,
+
+                                     }).ToList();
+            return lst;
+                                       
         }
 
-        [HttpGet]
-        public IActionResult Get()
-        {
-            using(NewShoreContext db = new NewShoreContext())
-            {
-                var lst = db.Flights.ToList();
-                return Ok(lst);
-            }
-        }
     }
 }

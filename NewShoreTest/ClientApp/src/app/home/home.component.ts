@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Input } from '@angular/core';
 import { ImplicitReceiver } from '@angular/compiler';
 import { HttpClient } from '@angular/common/http';
 import { FlightService } from '../service/flight.service';
@@ -14,8 +14,8 @@ declare const ShowSlider: any;
 })
 export class HomeComponent {
 
-  public lstFlight: Observable<Flights[]>; 
-
+  
+  public lstFlight: Observable<Flights[]>;
   bandera = false;
 
   constructor(http: HttpClient, @Inject("BASE_URL") baseUrl: string,
