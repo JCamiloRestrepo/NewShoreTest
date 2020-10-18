@@ -39,7 +39,6 @@ namespace NewShoreTest.Models
         [Display(Name = "Currency")]
         public string Currency { get; set; }
 
-
         public FlightModel()
         {
         }

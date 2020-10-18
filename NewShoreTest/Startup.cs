@@ -31,7 +31,7 @@ namespace NewShoreTest
             services.AddHttpContextAccessor();
 
             services.AddControllers();
-
+             
             services.AddMvc(option => option.EnableEndpointRouting = false)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
