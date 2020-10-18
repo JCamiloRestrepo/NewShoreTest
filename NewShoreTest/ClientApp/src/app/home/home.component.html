@@ -29,11 +29,11 @@
         <select for="origin">Origin</select>
       </div>
       <div class="input-field col s3">
-        <input id="Destination" type="text" class="validate">
+        <input id="Destination" type="text" class="validate"> 
         <select for="Destination">Destination</select>
       </div>
       <div class="input-field col s3">
-        <input id="From" type="text" class="validate">
+        <input id="From" type="text" class="datepicker">
         <label for="From">From</label>
       </div>
     </div>
@@ -58,10 +58,15 @@
   </thead>
 
   <tbody>
-    <tr *ngFor="let c of lstFlight">
+    <tr *ngFor="let c of lstFlight | async">
       <td>{{c}}</td>
       <td>{{c}}</td>
       <td>{{c}}</td>
     </tr>
   </tbody>
 </table>
+
+<div>
+
+</div>
+

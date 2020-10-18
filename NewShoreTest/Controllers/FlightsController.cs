@@ -11,7 +11,7 @@ namespace NewShoreTest.Controllers
 {
     [Route("api/flights")]
     [ApiController]
-    public class FlightsController
+    public class FlightsController : ControllerBase
     {
         private readonly NewShoreContext _context;
         private readonly IWebHostEnvironment _environment;
@@ -31,6 +31,16 @@ namespace NewShoreTest.Controllers
             return await _flightsDbSet
                 .Include(f => f.Transport)
                 .ToListAsync();
+        }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            using(NewShoreContext db = new NewShoreContext())
+            {
+                var lst = db.Flights.ToList();
+                return Ok(lst);
+            }
         }
     }
 }

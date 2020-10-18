@@ -34,8 +34,19 @@ document.addEventListener('DOMContentLoaded', function () {
     interval: 3000
   });
 });
+
 function ShosSlider() {
   let elm = querySelector("#slides")
   let instance = M.Slider.getInstance(elem);
   instance.open()
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  let elems = document.querySelectorAll('.datepicker');
+  let instances = M.Datepicker.init(elems, {
+    format: 'yyyy-mm-dd',
+  });
+  instances.open()
+});
+
+
