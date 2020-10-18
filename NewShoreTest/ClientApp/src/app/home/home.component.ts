@@ -1,9 +1,8 @@
 import { Component, OnInit, Inject, Input } from '@angular/core';
-import { ImplicitReceiver } from '@angular/compiler';
 import { HttpClient } from '@angular/common/http';
 import { FlightService } from '../service/flight.service';
 import { Flights } from '../Interfaces';
-import { Observable } from 'rxjs';
+import DateTimeFormat = Intl.DateTimeFormat;
 
 declare const ShowCarousel: any;
 declare const ShowSlider: any;
@@ -14,14 +13,18 @@ declare const ShowSlider: any;
 })
 export class HomeComponent {
 
-  
-  public lstFlight: Observable<Flights[]>;
+  public origin: string;
+  public destination: string;
+  public flightDate: Date;
+  public minDate: Date;
+
+  public lstFlight: Flights[] = [];
   bandera = false;
 
   constructor(http: HttpClient, @Inject("BASE_URL") baseUrl: string,
     protected flightService: FlightService
   ) {
-    this.GetFlights();
+    this.minDate = new Date();
   }
 
   ShowSliderHome() {
@@ -39,11 +42,28 @@ export class HomeComponent {
     else {
       this.bandera = estado;
     }
-      
+  }
+
+  public formValid() {
+    return this.flightDate && this.destination && this.origin;
+  }
+
+  public LimpiarBusqueda(){
+    this.lstFlight = [];
+    this.ShowTable(false);
+    this.origin = '';
+    this.destination = '';
+    this.flightDate = null;
   }
 
   public GetFlights() {
-    this.lstFlight = this.flightService.GetFlight();
+    this.lstFlight = [];
+    this.ShowTable(false);
+    this.flightService.GetFlight().subscribe(data => {
+      console.log(data);
+      this.lstFlight = data;
+      this.ShowTable(true);
+    });
   }
 }
 

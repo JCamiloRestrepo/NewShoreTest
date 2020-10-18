@@ -25,22 +25,28 @@
   <form class="col s12">
     <div class="row">
       <div class="input-field col s3">
-        <input id="Origin" type="text" class="validate">
+        <input [(ngModel)]="origin" name="origin" id="Origin" type="text" class="validate">
         <select for="origin">Origin</select>
+        <label for="From">Origin</label>
       </div>
       <div class="input-field col s3">
-        <input id="Destination" type="text" class="validate"> 
+        <input [(ngModel)]="destination" name="destination" id="Destination" type="text" class="validate">
         <select for="Destination">Destination</select>
+        <label for="From">Destination</label>
       </div>
       <div class="input-field col s3">
-        <input id="From" type="text" class="datepicker">
+        <input [(ngModel)]="flightDate" name="from" id="From" type="date" [min]="minDate|date:'yyyy-MM-dd'">
         <label for="From">From</label>
       </div>
     </div>
   </form>
-  <button (click)="ShowTable(!bandera)" class="btn wav  es-effect waves-light" type="submit" name="action">
+  <button *ngIf="!bandera" (click)="GetFlights()" class="btn wav  es-effect waves-light" [disabled]="!formValid()">
     Search
     <i class="material-icons">search</i>
+  </button>
+  <button *ngIf="bandera" (click)="LimpiarBusqueda()" class="btn wav es-effect waves-green">
+    Clear
+    <i class="material-icons">refresh</i>
   </button>
 </div>
 
@@ -50,6 +56,7 @@
       <th>Origin</th>
       <th>Destination</th>
       <th>From</th>
+
       <th>Flight number</th>
       <th>Price</th>
       <th>Currency</th>
@@ -58,10 +65,15 @@
   </thead>
 
   <tbody>
-    <tr *ngFor="let c of lstFlight | async">
-      <td>{{c.DepartureDate}}</td>
-      <td>{{c}}</td>
-      <td>{{c}}</td>
+    <tr *ngFor="let c of lstFlight">
+      <td>{{ origin }}</td>
+      <td>{{ destination }}</td>
+      <td>{{ flightDate }}</td>
+
+      <td>{{ c.transport.flightNumber }}</td>
+      <td>{{ c.price }}</td>
+      <td>{{ c.currency }}</td>
+      <td><button class="btn btn-primary">Continuar</button></td>
     </tr>
   </tbody>
 </table>
