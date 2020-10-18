@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewShoreTest.Context;
@@ -6,26 +9,28 @@ using NewShoreTest.Models;
 
 namespace NewShoreTest.Controllers
 {
-    [Microsoft.AspNetCore.Components.Route("api/flights")]
+    [Route("api/flights")]
+    [ApiController]
     public class FlightsController
     {
-        private readonly NewShoreContext Context;
-        private readonly IWebHostEnvironment Environment;
+        private readonly NewShoreContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        private DbSet<FlightModel> DbSet;
+        private DbSet<FlightModel> _flightsDbSet;
 
         public FlightsController(NewShoreContext context, IWebHostEnvironment environment)
         {
-            Context = context;
-            Environment = environment;
-            DbSet = context.Set<FlightModel>();
+            _context = context;
+            _environment = environment;
+            _flightsDbSet = context.Set<FlightModel>();
         }
 
-        [HttpGet("search")]
-        public string SearchFlights()
+        [HttpGet]
+        public async Task<ActionResult<List<FlightModel>>> GetFlights()
         {
-            var instance = new FlightModel();
-            return "OK";
+            return await _flightsDbSet
+                .Include(f => f.Transport)
+                .ToListAsync();
         }
     }
 }
