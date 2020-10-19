@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using NewShoreTest.Models.Response;
 using System.Text.Json.Serialization;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using NewShoreTest.Models;
 
 namespace NewShoreTest.Controllers
@@ -66,36 +67,22 @@ namespace NewShoreTest.Controllers
         [HttpPost]
         public async Task<FlightModel> SaveFlight([FromBody] ResponseApi flight)
         {
-            
-            return null;
-        }
-
-    }
-    
-    /*
-    public bool Add(ResponseApi responseApi)
-    {
-        
-        try
-        {
-            FlightModel flight = new FlightModel()
+            FlightModel newFlight = new FlightModel()
             {
-                DepartureStation = responseApi.DepartureStation,
-                DepartureDate = responseApi.DepartureDate,
-                ArrivalStation = responseApi.ArrivalStation,
-                Currency = responseApi.Currency,
-                Price = responseApi.Price,
-                FkTransporte = responseApi.FlightNumber
-
+                DepartureStation = flight.DepartureStation,
+                DepartureDate = flight.DepartureDate,
+                ArrivalStation = flight.ArrivalStation,
+                Currency = flight.Currency,
+                Price = flight.Price,
+                Transport = new TransportModel()
+                {
+                    FlightNumber = flight.FlightNumber
+                }
             };
-            //using (NewShoreContext db = new NewShoreContext())
-            return true;
-        }
-        catch
-        {
-            return false;
+            db.Flights.Add(newFlight);
+            await db.SaveChangesAsync();
+            return newFlight;
         }
 
     }
-    */
 }
