@@ -11,7 +11,7 @@ declare const ShowSlider: any;
   selector: 'app-home',
   templateUrl: './home.component.html',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
   public origin: string;
   public destination: string;
@@ -26,6 +26,10 @@ export class HomeComponent {
   ) {
     this.minDate = new Date();
   }
+
+  ngOnInit(): void{
+    this.GetFlights();
+}
 
   ShowSliderHome() {
     ShowSlider();
@@ -66,5 +70,7 @@ export class HomeComponent {
     });
   }
 }
+
+
 
 
