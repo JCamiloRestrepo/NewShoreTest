@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { Flights } from '../Interfaces';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -15,8 +15,12 @@ export class FlightService {
     this.baseUrl = baseUrl;
   }
 
-  public GetFlight(): Observable<Flights[]> {
-    
-    return this.http.get<Flights[]>(this.baseUrl + "api/flights");
+  public GetFlight(origin: string, destination: string, flightDate: string): Observable<Flights[]> {
+    const params = new HttpParams()
+      .set('origin', origin)
+      .set('destination', destination)
+      .set('from', flightDate);
+
+    return this.http.get<Flights[]>(this.baseUrl + "api/flights", {params});
   }
 }

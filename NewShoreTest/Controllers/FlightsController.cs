@@ -7,20 +7,21 @@ using Microsoft.AspNetCore.Mvc;
 using NewShoreTest.Models.Response;
 using System.Text.Json.Serialization;
 using System.Diagnostics;
+using NewShoreTest.Models;
 
 namespace NewShoreTest.Controllers
 {
-    [Route("api/flights")] 
+    [Route("api/flights")]
     public class FlightsController : ControllerBase
     {
         private Context.NewShoreContext db;
-        
+
         public HttpClient Client { get; }
 
-        public FlightsController(Context.NewShoreContext context, HttpClient client)
+        public FlightsController(Context.NewShoreContext context)
         {
             db = context;
-            Client = client;
+            Client = new HttpClient();
         }
 
         public async Task<IEnumerable<ResponseApi>> GetFlightsFromApi(string FlightOrigin, string FlightDestination, string FlightDate)
@@ -42,7 +43,7 @@ namespace NewShoreTest.Controllers
 
             httpResponse.EnsureSuccessStatusCode();
             var responseStream = await httpResponse.Content.ReadAsStringAsync();
-
+            responseStream = responseStream.Substring(1, responseStream.Length - 2).Replace("\\", "");
             respuesta = JsonSerializer.Deserialize<List<ResponseApi>>(responseStream);
 
             Debug.WriteLine("hae", respuesta.ToString());
@@ -51,26 +52,39 @@ namespace NewShoreTest.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ResponseApi>> Flight()
+        public async Task<IEnumerable<ResponseApi>> Flight(
+            [FromQuery(Name = "origin")] string origin,
+            [FromQuery(Name = "destination")] string destination,
+            [FromQuery(Name = "from")] string from
+            )
         {
-            var response = await GetFlightsFromApi("MDE", "CTG", "2020-01-01");
+            var response = await GetFlightsFromApi(origin, destination, from);
 
-            
-            //List<ResponseApi> lst = (from d in db.Flights
-            //                         select new FlightModel
-            //                         {
-            //                             Id = d.Id,
-            //                             DepartureDate = d.DepartureDate,
-            //                             DepartureStation = d.DepartureStation,
-            //                             ArrivalStation = d.ArrivalStation,
-            //                             Transport = d.Transport,
-            //                             Price = d.Price,
-            //                             Currency = d.Currency,
-            //                             FkTransporte = d.FkTransporte,
-
-            //                         }).ToList();
-            
             return response;
+        }
+
+    }
+    public bool Add(ResponseApi responseApi)
+    {
+
+        try
+        {
+            FlightModel flight = new FlightModel()
+            {
+                DepartureStation = responseApi.DepartureStation,
+                DepartureDate = responseApi.DepartureDate,
+                ArrivalStation = responseApi.ArrivalStation,
+                Currency = responseApi.Currency,
+                Price = responseApi.Price,
+                FkTransporte = responseApi.FlightNumber
+
+            };
+            //using (NewShoreContext db = new NewShoreContext())
+            return true;
+        }
+        catch
+        {
+            return false;
         }
 
     }

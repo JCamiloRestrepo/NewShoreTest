@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
 
   public origin: string;
   public destination: string;
-  public flightDate: Date;
+  public flightDate: string;
   public minDate: Date;
 
   public lstFlight: Flights[] = [];
@@ -28,7 +28,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void{
-    this.GetFlights();
 }
 
   ShowSliderHome() {
@@ -63,7 +62,7 @@ export class HomeComponent implements OnInit {
   public GetFlights() {
     this.lstFlight = [];
     this.ShowTable(false);
-    this.flightService.GetFlight().subscribe(data => {
+    this.flightService.GetFlight(this.origin, this.destination, this.flightDate).subscribe(data => {
       console.log(data);
       this.lstFlight = data;
       this.ShowTable(true);

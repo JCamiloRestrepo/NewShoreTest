@@ -28,6 +28,8 @@ namespace NewShoreTest
 
             );
 
+            services.AddHttpClient();
+
             services.AddHttpContextAccessor();
 
             services.AddControllers();

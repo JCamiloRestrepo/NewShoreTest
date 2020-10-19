@@ -1,9 +1,9 @@
 
 export interface Flights {
-  DepartureDate: string,
-  DepartureStation: string,
-  ArrivalStation: string,
-  FlightNumber: string,
-  Price: number,
-  Currency: string
+  departureDate: string,
+  departureStation: string,
+  arrivalStation: string,
+  flightNumber: string,
+  price: number,
+  currency: string
 }
