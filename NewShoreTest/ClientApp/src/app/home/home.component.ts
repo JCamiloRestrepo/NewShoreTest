@@ -68,6 +68,14 @@ export class HomeComponent implements OnInit {
       this.ShowTable(true);
     });
   }
+
+  public SaveFlight(flight: Flights) {
+    this.flightService.SaveFlight(flight).subscribe(data => {
+      alert("El vuelo se guardó exitosamente")
+      this.lstFlight = [];
+      this.ShowTable(false);
+    })
+  }
 }
 
 

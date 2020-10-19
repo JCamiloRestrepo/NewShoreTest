@@ -23,4 +23,8 @@ export class FlightService {
 
     return this.http.get<Flights[]>(this.baseUrl + "api/flights", {params});
   }
+
+  public SaveFlight(flight: Flights): Observable<Flights> {
+    return this.http.post<Flights>(this.baseUrl + "api/flights", flight);
+  }
 }

@@ -62,11 +62,20 @@ namespace NewShoreTest.Controllers
 
             return response;
         }
+        
+        [HttpPost]
+        public async Task<FlightModel> SaveFlight([FromBody] ResponseApi flight)
+        {
+            
+            return null;
+        }
 
     }
+    
+    /*
     public bool Add(ResponseApi responseApi)
     {
-
+        
         try
         {
             FlightModel flight = new FlightModel()
@@ -88,4 +97,5 @@ namespace NewShoreTest.Controllers
         }
 
     }
+    */
 }
