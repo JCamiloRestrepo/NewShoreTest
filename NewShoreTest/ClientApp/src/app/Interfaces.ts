@@ -7,3 +7,8 @@ export interface Flights {
   price: number,
   currency: string
 }
+
+export interface cities {
+  item_id: string,
+  item_text: string
+}

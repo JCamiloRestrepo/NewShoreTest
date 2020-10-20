@@ -25,18 +25,19 @@
   <form class="col s12">
     <div class="row">
       <div class="input-field col s3">
-        <input [(ngModel)]="origin" name="origin" id="Origin" type="text" class="validate">
-        <select for="origin">Origin</select>
-        <label for="From">Origin</label>
+        <ng-multiselect-dropdown [placeholder]="'Origin'" [data]="lstcities"
+                                 [(ngModel)]="origin" [settings]="dropdownSettings" name="origin"
+                                 (onSelect)="onItemSelect($event)">
+        </ng-multiselect-dropdown>
       </div>
       <div class="input-field col s3">
-        <input [(ngModel)]="destination" name="destination" id="Destination" type="text" class="validate">
-        <select for="Destination">Destination</select>
-        <label for="From">Destination</label>
+        <ng-multiselect-dropdown [placeholder]="'Destination'" [data]="lstcities"
+                                 [(ngModel)]="destination" [settings]="dropdownSettings" name="destination"
+                                 (onSelect)="onItemSelect($event)">
+        </ng-multiselect-dropdown>
       </div>
       <div class="input-field col s3">
         <input [(ngModel)]="flightDate" name="from" id="From" type="date" [min]="minDate|date:'yyyy-MM-dd'">
-        <label for="From">From</label>
       </div>
     </div>
   </form>
@@ -66,9 +67,9 @@
 
   <tbody>
     <tr *ngFor="let c of lstFlight">
-      <td>{{ origin }}</td>
-      <td>{{ destination }}</td>
-      <td>{{ flightDate }}</td>
+      <td>{{ c.departureStation }}</td>
+      <td>{{ c.arrivalStation }}</td>
+      <td>{{ c.departureDate }}</td>
 
       <td>{{ c.flightNumber }}</td>
       <td>{{ c.price }}</td>

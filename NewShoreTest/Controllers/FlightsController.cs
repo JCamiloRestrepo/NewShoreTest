@@ -47,8 +47,6 @@ namespace NewShoreTest.Controllers
             responseStream = responseStream.Substring(1, responseStream.Length - 2).Replace("\\", "");
             respuesta = JsonSerializer.Deserialize<List<ResponseApi>>(responseStream);
 
-            Debug.WriteLine("hae", respuesta.ToString());
-
             return respuesta;
         }
 

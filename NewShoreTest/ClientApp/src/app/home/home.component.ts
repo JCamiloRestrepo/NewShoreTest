@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FlightService } from '../service/flight.service';
-import { Flights } from '../Interfaces';
+import { Flights, cities } from '../Interfaces';
 import DateTimeFormat = Intl.DateTimeFormat;
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
 declare const ShowCarousel: any;
 declare const ShowSlider: any;
@@ -13,10 +14,13 @@ declare const ShowSlider: any;
 })
 export class HomeComponent implements OnInit {
 
-  public origin: string;
-  public destination: string;
+  public origin: cities[];
+  public destination: cities[];
   public flightDate: string;
   public minDate: Date;
+
+  lstcities : cities[]; 
+  dropdownSettings: IDropdownSettings;
 
   public lstFlight: Flights[] = [];
   bandera = false;
@@ -27,9 +31,27 @@ export class HomeComponent implements OnInit {
     this.minDate = new Date();
   }
 
-  ngOnInit(): void{
-}
+  ngOnInit() {
+    this.lstcities = [
+      { item_id: "MDE", item_text: 'Medellin-MDE' },
+      { item_id: "BOG", item_text: 'Bogotá-BOG' },
+      { item_id: "CTG", item_text: 'Cartagena-CTG' },
+      { item_id: "PEI", item_text: 'Pereira-PEI' }
+    ];
+    
 
+    this.dropdownSettings = {
+      singleSelection: true,
+      idField: 'item_id',
+      textField: 'item_text',
+      itemsShowLimit: 1
+    };
+  }
+
+  onItemSelect(item: any) {
+    console.log(item);
+  }
+    
   ShowSliderHome() {
     ShowSlider();
   }
@@ -54,18 +76,18 @@ export class HomeComponent implements OnInit {
   public LimpiarBusqueda(){
     this.lstFlight = [];
     this.ShowTable(false);
-    this.origin = '';
-    this.destination = '';
     this.flightDate = null;
   }
 
   public GetFlights() {
+    console.log(this.origin[0].item_id);
     this.lstFlight = [];
     this.ShowTable(false);
-    this.flightService.GetFlight(this.origin, this.destination, this.flightDate).subscribe(data => {
+    this.flightService.GetFlight(this.origin[0].item_id, this.destination[0].item_id, this.flightDate).subscribe(data => {
       console.log(data);
       this.lstFlight = data;
       this.ShowTable(true);
+      
     });
   }
 
