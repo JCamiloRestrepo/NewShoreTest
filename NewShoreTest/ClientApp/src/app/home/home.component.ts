@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit {
   public minDate: Date;
 
   lstcities : cities[]; 
-  dropdownSettings: IDropdownSettings;
+  citiesSettings: IDropdownSettings;
 
   public lstFlight: Flights[] = [];
   bandera = false;
@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
     ];
     
 
-    this.dropdownSettings = {
+    this.citiesSettings = {
       singleSelection: true,
       idField: 'item_id',
       textField: 'item_text',
@@ -48,9 +48,6 @@ export class HomeComponent implements OnInit {
     };
   }
 
-  onItemSelect(item: any) {
-    console.log(item);
-  }
     
   ShowSliderHome() {
     ShowSlider();
@@ -60,34 +57,26 @@ export class HomeComponent implements OnInit {
     ShowCarousel();
   }
 
-  public ShowTable(estado) {
-    if (estado) {
-      this.bandera = estado;
+  public ShowTable(status) {
+    if (status) {
+      this.bandera = status;
     }
     else {
-      this.bandera = estado;
+      this.bandera = status;
     }
   }
 
   public formValid() {
-    return this.flightDate && this.destination && this.origin;
-  }
-
-  public LimpiarBusqueda(){
-    this.lstFlight = [];
-    this.ShowTable(false);
-    this.flightDate = null;
+    return this.flightDate && this.destination[0].item_id && this.origin[0].item_id;
   }
 
   public GetFlights() {
-    console.log(this.origin[0].item_id);
     this.lstFlight = [];
     this.ShowTable(false);
     this.flightService.GetFlight(this.origin[0].item_id, this.destination[0].item_id, this.flightDate).subscribe(data => {
       console.log(data);
       this.lstFlight = data;
       this.ShowTable(true);
-      
     });
   }
 

@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
 })
 
 export class FlightService {
-  public algo: string = "Holaaa";
   baseUrl: string;
 
   constructor(protected http: HttpClient, @Inject('BASE_URL') baseUrl: string) {

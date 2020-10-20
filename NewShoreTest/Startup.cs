@@ -28,6 +28,10 @@ namespace NewShoreTest
 
             );
 
+            services.AddTransient<Interfaces.IApi, Implementation.ApiImplementation>();
+
+            services.AddTransient<Interfaces.IDataBase, Implementation.DataBaseImplementation>();
+
             services.AddHttpClient();
 
             services.AddHttpContextAccessor();
