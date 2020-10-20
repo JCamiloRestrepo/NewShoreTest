@@ -10,7 +10,7 @@ namespace NewShoreTest.Interfaces
 {
     public interface IDataBase
     {
-       [HttpGet]
+       [HttpPost]
        Task<FlightModel> SaveFlight(ResponseApi flight);
         
     }
