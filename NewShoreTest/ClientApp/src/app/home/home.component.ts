@@ -66,18 +66,32 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  public formValid() {
-    return this.flightDate && this.destination && this.origin;
-  }
-
   public GetFlights() {
-    if (this.origin == []) {
+    if (this.origin.length <= 0 && this.destination.length == 1) {
       this.lstFlight = [];
       this.ShowTable(false);
-      this.flightService.GetFlight(" ", " ", this.flightDate).subscribe(data => {
-        alert("El vuelo se guardó exitosamente")
+      alert("El origen del vuelo está vacio")
+      this.flightService.GetFlight(null, this.destination[0].item_id, this.flightDate).subscribe(data => {        
         console.log(data);
         this.lstFlight = data;        
+      });
+    }
+    else if (this.destination.length <= 0 && this.origin.length == 1) {
+      this.lstFlight = [];
+      this.ShowTable(false);
+      alert("El destino del vuelo está vacio")
+      this.flightService.GetFlight(this.origin[0].item_id, null, this.flightDate).subscribe(data => {
+        console.log(data);
+        this.lstFlight = data;
+      });
+    }
+    else if (this.destination.length <= 0 && this.origin.length == 0) {
+      this.lstFlight = [];
+      this.ShowTable(false);
+      alert("El origen y el destino del vuelo están vacios")
+      this.flightService.GetFlight(null, null, this.flightDate).subscribe(data => {
+        console.log(data);
+        this.lstFlight = data;
       });
     }
     else {

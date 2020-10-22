@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using NewShoreTest.DataBaseAccessObject.Handler.Interfaces;
 using NewShoreTest.ExternalAPIs.VivaAirAPI.Response;
@@ -27,6 +28,13 @@ namespace NewShoreTest.DataBaseAccessObject.Handler.Implementation
         {
             try
             {
+                _logger.LogInformation("|INFO|" + "Los datos a ingresar en DB son:" 
+                   + "\n" + "Origen: " + flight.DepartureStation
+                   + "\n" + "Destino: " + flight.ArrivalStation
+                   + "\n" + "Fecha: " + flight.DepartureDate
+                   + "\n" + "Currency: " + flight.Currency
+                   + "\n" + "Precio: " + flight.Price
+                   + "\n" + "Numero de vuelo: " + flight.FlightNumber);
                 FlightModel newFlight = new FlightModel()
                 {
                     DepartureStation = flight.DepartureStation,
@@ -41,13 +49,18 @@ namespace NewShoreTest.DataBaseAccessObject.Handler.Implementation
                 };
                 db.Flights.Add(newFlight);
                 await db.SaveChangesAsync();
-                _logger.LogInformation("El vuelo ha sido guardado con exito");
+                _logger.LogInformation("|INFO|" + " El vuelo ha sido guardado con exito");
                 return newFlight;
             }catch (Exception ex)
             {
-                _logger.LogError("El vuelo no puede ser guardado" + ex.ToString());
-                return null;
-
+                _logger.LogError("|ERROR|" + "El vuelo no puede ser guardado, datos recibidos :"
+                   + "\n" + "Origen: " + flight.DepartureStation
+                   + "\n" + "Destino: " + flight.ArrivalStation
+                   + "\n" + "Fecha: " + flight.DepartureDate
+                   + "\n" + "Currency: " + flight.Currency
+                   + "\n" + "Precio: " + flight.Price
+                   + "\n" + "Numero de vuelo: " + flight.FlightNumber);
+                throw new Exception("Mensaje de error " + ex.Message);
             }
         }
     }

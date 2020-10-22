@@ -29,41 +29,47 @@ namespace NewShoreTest.ExternalAPIs.VivaAirAPI.Handler.Implementation
         }
 
 
-        public async Task<IEnumerable<VivaAirApiResponse>> GetFlightsFromApi(string FlightOrigin, 
+        public async Task<IEnumerable<VivaAirApiResponse>> GetFlightsFromApi(string FlightOrigin,
             string FlightDestination, string FlightDate)
         {
             try
             {
+           
+                _logger.LogInformation("|INFO|"+"Los parametros de busqueda recibidos:" + "\n" + "Origen: " + FlightOrigin
+                    + "\n" + "Destino: " + FlightDestination
+                    + "\n" + "Fecha: " + FlightDate);
+                List<VivaAirApiResponse> respuesta = new List<VivaAirApiResponse>();
+                var requestObject = new
                 {
-                    List<VivaAirApiResponse> respuesta = new List<VivaAirApiResponse>();
-                    var requestObject = new
-                    {
-                        Origin = FlightOrigin,
-                        Destination = FlightDestination,
-                        From = FlightDate
-                    };
-                    var requestJson = new StringContent(
-                        JsonSerializer.Serialize(requestObject),
-                        Encoding.UTF8,
-                        "application/json");
+                    Origin = FlightOrigin,
+                    Destination = FlightDestination,
+                    From = FlightDate
+                };
+                var requestJson = new StringContent(
+                    JsonSerializer.Serialize(requestObject),
+                    Encoding.UTF8,
+                    "application/json");
 
-                    var httpResponse =
-                        await Client.PostAsync("http://testapi.vivaair.com/otatest/api/values", requestJson);
+                var httpResponse =
+                    await Client.PostAsync("http://testapi.vivaair.com/otatest/api/values", requestJson);
 
-                    httpResponse.EnsureSuccessStatusCode();
-                    var responseStream = await httpResponse.Content.ReadAsStringAsync();
-                    responseStream = responseStream.Substring(1, responseStream.Length - 2).Replace("\\", "");
-                    respuesta = JsonSerializer.Deserialize<List<VivaAirApiResponse>>(responseStream);
+                httpResponse.EnsureSuccessStatusCode();
+                var responseStream = await httpResponse.Content.ReadAsStringAsync();
+                responseStream = responseStream.Substring(1, responseStream.Length - 2).Replace("\\", "");
+                respuesta = JsonSerializer.Deserialize<List<VivaAirApiResponse>>(responseStream);
 
-                    _logger.LogInformation("Los parametros de busqueda son correctos, vuelos encontrados");
-                    return respuesta;
+                _logger.LogInformation("|INFO|" + "Los parametros de busqueda son correctos, vuelos encontrados");
+                return respuesta;
 
-                }
-            }catch (Exception ex)
+
+            }
+            catch (Exception ex)
             {
-                _logger.LogError("Los parametros de busqueda no son correctos" + ex.Message);
-                return null;
-
+               _logger.LogError("|ERROR|" + " Los parametros de busqueda no son correctos." + "\n" +
+                    "Parametros recibidos:" + "\n" + "Origen: " + FlightOrigin
+                    + "\n" + "Destino: " + FlightDestination
+                    + "\n" + "Fecha: " + FlightDate + "\n" + ex.Message);
+                throw new Exception("Mensaje de error" + ex.Message);
             }
 
         }

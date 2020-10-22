@@ -8,7 +8,7 @@ namespace NewShoreTest.Exceptions
 {
     [Serializable()]
     public class SearchException : SystemException
-    {
+    {        
         public SearchException()
         {
         }
