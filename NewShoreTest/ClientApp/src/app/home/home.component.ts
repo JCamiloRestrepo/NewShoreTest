@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
   public flightDate: string;
   public minDate: Date;
 
-  lstcities : cities[]; 
+  lstcities: cities[];
   citiesSettings: IDropdownSettings;
 
   public lstFlight: Flights[] = [];
@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
       { item_id: "CTG", item_text: 'Cartagena-CTG' },
       { item_id: "PEI", item_text: 'Pereira-PEI' }
     ];
-    
+
 
     this.citiesSettings = {
       singleSelection: true,
@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
     };
   }
 
-    
+
   ShowSliderHome() {
     ShowSlider();
   }
@@ -67,17 +67,28 @@ export class HomeComponent implements OnInit {
   }
 
   public formValid() {
-    return this.flightDate && this.destination[0].item_id && this.origin[0].item_id;
+    return this.flightDate && this.destination && this.origin;
   }
 
   public GetFlights() {
-    this.lstFlight = [];
-    this.ShowTable(false);
-    this.flightService.GetFlight(this.origin[0].item_id, this.destination[0].item_id, this.flightDate).subscribe(data => {
-      console.log(data);
-      this.lstFlight = data;
-      this.ShowTable(true);
-    });
+    if (this.origin == []) {
+      this.lstFlight = [];
+      this.ShowTable(false);
+      this.flightService.GetFlight(" ", " ", this.flightDate).subscribe(data => {
+        alert("El vuelo se guardó exitosamente")
+        console.log(data);
+        this.lstFlight = data;        
+      });
+    }
+    else {
+      this.lstFlight = [];
+      this.ShowTable(false);
+      this.flightService.GetFlight(this.origin[0].item_id, this.destination[0].item_id, this.flightDate).subscribe(data => {
+        console.log(data);
+        this.lstFlight = data;
+        this.ShowTable(true);
+      });
+    }
   }
 
   public SaveFlight(flight: Flights) {

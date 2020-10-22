@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NewShoreTest.Models.Response
+namespace NewShoreTest.ExternalAPIs.VivaAirAPI.Response
 {
-    public class ResponseApi
+    public class VivaAirApiResponse
     {
         public string DepartureStation { get; set; }
         public string ArrivalStation { get; set; }

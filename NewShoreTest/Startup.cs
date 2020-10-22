@@ -28,9 +28,11 @@ namespace NewShoreTest
 
             );
 
-            services.AddTransient<Interfaces.IApi, Implementation.ApiImplementation>();
+            services.AddTransient<ExternalAPIs.VivaAirAPI.Handler.Interface.VivaAirApiInterface,
+                ExternalAPIs.VivaAirAPI.Handler.Implementation.VivaAirApiImplementation>();
 
-            services.AddTransient<Interfaces.IDataBase, Implementation.DataBaseImplementation>();
+            services.AddTransient<DataBaseAccessObject.Handler.Interfaces.DataBaseInterface,
+                DataBaseAccessObject.Handler.Implementation.DataBaseImplementation>();
 
             services.AddHttpClient();
 

@@ -4,11 +4,12 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using NewShoreTest.Models.Response;
 using System.Text.Json.Serialization;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using NewShoreTest.Models;
+using Microsoft.Extensions.Logging;
+using NewShoreTest.ExternalAPIs.VivaAirAPI.Response;
 
 namespace NewShoreTest.Controllers
 {
@@ -16,17 +17,18 @@ namespace NewShoreTest.Controllers
     public class FlightsController : ControllerBase
     {
 
-        Interfaces.IDataBase _dataBase;
-        Interfaces.IApi _api;
+        private readonly  DataBaseAccessObject.Handler.Interfaces.DataBaseInterface _dataBase;
+        private readonly  ExternalAPIs.VivaAirAPI.Handler.Interface.VivaAirApiInterface _api;
 
-        public FlightsController(Interfaces.IDataBase dataBase, Interfaces.IApi api)
+        public FlightsController(DataBaseAccessObject.Handler.Interfaces.DataBaseInterface dataBase,
+            ExternalAPIs.VivaAirAPI.Handler.Interface.VivaAirApiInterface api)
         {
             _dataBase = dataBase;
             _api = api;
         }
 
         [HttpPost]
-        public async Task<FlightModel> SaveFlight([FromBody] ResponseApi flight)
+        public async Task<FlightModel> SaveFlight([FromBody] VivaAirApiResponse flight)
         {
 
             FlightModel model = await _dataBase.SaveFlight(flight);
@@ -34,7 +36,7 @@ namespace NewShoreTest.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ResponseApi>> Flight(
+        public async Task<IEnumerable<VivaAirApiResponse>> Flight(
             [FromQuery(Name = "origin")] string origin,
             [FromQuery(Name = "destination")] string destination,
             [FromQuery(Name = "from")] string from)
