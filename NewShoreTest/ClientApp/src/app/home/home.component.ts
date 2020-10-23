@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit {
     else if (this.destination.length <= 0 && this.origin.length == 0) {
       this.lstFlight = [];
       this.ShowTable(false);
-      alert("The origin and departure fields are empty")
+      alert("The departure and destination fields are empty")
       this.flightService.GetFlight(null, null, this.flightDate).subscribe(data => {
         console.log(data);
         this.lstFlight = data;
