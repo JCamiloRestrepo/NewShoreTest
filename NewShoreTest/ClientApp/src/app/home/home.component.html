@@ -39,11 +39,11 @@
       </div>
     </div>
   </form>
-  <button *ngIf="!bandera" (click)="GetFlights()" class="btn wav es-effect waves-light">
+  <button *ngIf="!flag" (click)="GetFlights()" class="btn wav es-effect waves-light">
     Search
     <i class="material-icons">search</i>
   </button>
-  <button *ngIf="bandera" (click)="GetFlights()" class="btn wav es-effect waves-green">
+  <button *ngIf="flag" (click)="GetFlights()" class="btn wav es-effect waves-green">
     Search
     <i class="material-icons">search</i>
   </button>

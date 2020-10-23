@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
 
   public lstFlight: Flights[] = [];
   public lstFlightDB: Flights[] = [];
-  bandera = false;
+  flag = false;
 
   constructor(http: HttpClient, @Inject("BASE_URL") baseUrl: string,
     protected flightService: FlightService
@@ -60,10 +60,10 @@ export class HomeComponent implements OnInit {
 
   public ShowTable(status) {
     if (status) {
-      this.bandera = status;
+      this.flag = status;
     }
     else {
-      this.bandera = status;
+      this.flag = status;
     }
   }
 
@@ -71,7 +71,7 @@ export class HomeComponent implements OnInit {
     if (this.origin.length <= 0 && this.destination.length == 1) {
       this.lstFlight = [];
       this.ShowTable(false);
-      alert("El origen del vuelo está vacio")
+      alert("The departure field is empty")
       this.flightService.GetFlight(null, this.destination[0].item_id, this.flightDate).subscribe(data => {        
         console.log(data);
         this.lstFlight = data;        
@@ -80,7 +80,7 @@ export class HomeComponent implements OnInit {
     else if (this.destination.length <= 0 && this.origin.length == 1) {
       this.lstFlight = [];
       this.ShowTable(false);
-      alert("El destino del vuelo está vacio")
+      alert("The destination field is empty")
       this.flightService.GetFlight(this.origin[0].item_id, null, this.flightDate).subscribe(data => {
         console.log(data);
         this.lstFlight = data;
@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit {
     else if (this.destination.length <= 0 && this.origin.length == 0) {
       this.lstFlight = [];
       this.ShowTable(false);
-      alert("El origen y el destino del vuelo están vacios")
+      alert("The origin and departure fields are empty")
       this.flightService.GetFlight(null, null, this.flightDate).subscribe(data => {
         console.log(data);
         this.lstFlight = data;
@@ -108,7 +108,7 @@ export class HomeComponent implements OnInit {
 
   public SaveFlight(flight: Flights) {
     this.flightService.SaveFlight(flight).subscribe(data => {
-      alert("El vuelo se guardó exitosamente")
+      alert("The flight was successfully saved")
       this.lstFlight = [];
       this.ShowTable(false);
     });

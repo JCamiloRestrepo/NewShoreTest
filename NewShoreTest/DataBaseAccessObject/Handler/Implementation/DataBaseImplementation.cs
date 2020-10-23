@@ -1,40 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.Logging;
 using NewShoreTest.DataBaseAccessObject.Handler.Interfaces;
 using NewShoreTest.ExternalAPIs.VivaAirAPI.Response;
 using NewShoreTest.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+/**
+ * Class to implement the methods related to the DB
+ * This class implements the DBInterface
+ **/
 namespace NewShoreTest.DataBaseAccessObject.Handler.Implementation
 {
     [Route("api/flights")]
     public class DataBaseImplementation : DataBaseInterface
     {
-        private Context.NewShoreContext db;
-        private readonly ILogger<DataBaseImplementation> _logger;
+        private readonly Context.NewShoreContext db;
 
-        public DataBaseImplementation(Context.NewShoreContext context, ILogger<DataBaseImplementation> logger)
+        public DataBaseImplementation(Context.NewShoreContext context)
         {
             db = context;
-            _logger = logger;
         }
+
+        /**
+         * Method to save flights in DB
+         * It receives as parameter a flight from API,
+         * returns a flight with a model from the flights table
+         **/
 
         [HttpPost]
         public async Task<FlightModel> SaveFlight(VivaAirApiResponse flight)
         {
             try
             {
-                _logger.LogInformation("|INFO|" + "Los datos a ingresar en DB son:" 
-                   + "\n" + "Origen: " + flight.DepartureStation
-                   + "\n" + "Destino: " + flight.ArrivalStation
-                   + "\n" + "Fecha: " + flight.DepartureDate
-                   + "\n" + "Currency: " + flight.Currency
-                   + "\n" + "Precio: " + flight.Price
-                   + "\n" + "Numero de vuelo: " + flight.FlightNumber);
                 FlightModel newFlight = new FlightModel()
                 {
                     DepartureStation = flight.DepartureStation,
@@ -49,25 +47,23 @@ namespace NewShoreTest.DataBaseAccessObject.Handler.Implementation
                 };
                 db.Flights.Add(newFlight);
                 await db.SaveChangesAsync();
-                _logger.LogInformation("|INFO|" + " El vuelo ha sido guardado con exito");
                 return newFlight;
-            }catch (Exception ex)
+            }
+            catch
             {
-                _logger.LogError("|ERROR|" + "El vuelo no puede ser guardado, datos recibidos :"
-                   + "\n" + "Origen: " + flight.DepartureStation
-                   + "\n" + "Destino: " + flight.ArrivalStation
-                   + "\n" + "Fecha: " + flight.DepartureDate
-                   + "\n" + "Currency: " + flight.Currency
-                   + "\n" + "Precio: " + flight.Price
-                   + "\n" + "Numero de vuelo: " + flight.FlightNumber);
-                throw new Exception("Mensaje de error " + ex.Message);
+                return null;
             }
         }
+
+        /**
+         * Method to get all the flights from DB
+         * returns a list with all saved flights
+         **/
         [HttpGet("db")]
         public IEnumerable<FlightModel> GetFlights()
         {
-            try {
-                _logger.LogInformation("|INFO|" + " Buscando vuelos en DB");
+            try
+            {
                 List<FlightModel> lst = (from d in db.Flights
                                          select new FlightModel
                                          {
@@ -80,17 +76,16 @@ namespace NewShoreTest.DataBaseAccessObject.Handler.Implementation
                                              Price = d.Price,
                                              Currency = d.Currency
                                          }).ToList();
-
-                _logger.LogInformation("|INFO|" + " Los vuelos han sido buscados con exito");
                 return lst;
-            }catch(Exception ex)
+            }
+            catch
             {
-                _logger.LogError("|ERROR|" + "Los vuelos no puede ser mostrados :");
-                throw new Exception("Mensaje de error " + ex.Message);
+                return null;
             }
-            }
+        }
 
-       
-        
+
     }
+
 }
+

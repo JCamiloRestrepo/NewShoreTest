@@ -10,7 +10,6 @@ namespace NewShoreTest.Context
         {
 
         }
-
         public DbSet<FlightModel> Flights { get; set; }
         public DbSet<TransportModel> Transports { get; set; }   
         protected override void OnModelCreating(ModelBuilder modelBuilder)

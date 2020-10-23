@@ -5,16 +5,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+/**
+   * Interface of the methods to implement in DB
+ **/
 
 namespace NewShoreTest.DataBaseAccessObject.Handler.Interfaces
 {
     public interface DataBaseInterface
     {
-       [HttpPost]
-       Task<FlightModel> SaveFlight(VivaAirApiResponse flight);
+        [HttpPost]
+        Task<FlightModel> SaveFlight(VivaAirApiResponse flight);
 
-       [HttpGet("db")]
-       IEnumerable<FlightModel> GetFlights();
-        
+        [HttpGet("db")]
+        IEnumerable<FlightModel> GetFlights();
+
     }
 }

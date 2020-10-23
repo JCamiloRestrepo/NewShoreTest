@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Serialization;
-using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using NewShoreTest.Models;
 using Microsoft.Extensions.Logging;
 using NewShoreTest.ExternalAPIs.VivaAirAPI.Response;
 using NewShoreTest.ExternalAPIs.VivaAirAPI.Handler.Interface;
+using System.Diagnostics;
+
+/**
+ * Class to implement the methods related to the API
+ * This class implements the APIInterface
+ **/
 
 namespace NewShoreTest.ExternalAPIs.VivaAirAPI.Handler.Implementation
 {
@@ -20,25 +21,25 @@ namespace NewShoreTest.ExternalAPIs.VivaAirAPI.Handler.Implementation
     public class VivaAirApiImplementation : VivaAirApiInterface
     {
         public HttpClient Client { get; }
-        private readonly ILogger<VivaAirApiImplementation> _logger;
 
-        public VivaAirApiImplementation(ILogger<VivaAirApiImplementation> logger)
+
+        public VivaAirApiImplementation()
         {
             Client = new HttpClient();
-            _logger = logger;
         }
 
+        /**
+         * Method to get flights from externalAPI by method post
+         * It receives three parameters sent from user request,
+         * returns a list with all the flights found
+         **/
 
         public async Task<IEnumerable<VivaAirApiResponse>> GetFlightsFromApi(string FlightOrigin,
             string FlightDestination, string FlightDate)
         {
             try
             {
-           
-                _logger.LogInformation("|INFO|"+"Los parametros de busqueda recibidos:" + "\n" + "Origen: " + FlightOrigin
-                    + "\n" + "Destino: " + FlightDestination
-                    + "\n" + "Fecha: " + FlightDate);
-                List<VivaAirApiResponse> respuesta = new List<VivaAirApiResponse>();
+                List<VivaAirApiResponse> reply = new List<VivaAirApiResponse>();
                 var requestObject = new
                 {
                     Origin = FlightOrigin,
@@ -56,32 +57,34 @@ namespace NewShoreTest.ExternalAPIs.VivaAirAPI.Handler.Implementation
                 httpResponse.EnsureSuccessStatusCode();
                 var responseStream = await httpResponse.Content.ReadAsStringAsync();
                 responseStream = responseStream.Substring(1, responseStream.Length - 2).Replace("\\", "");
-                respuesta = JsonSerializer.Deserialize<List<VivaAirApiResponse>>(responseStream);
+                reply = JsonSerializer.Deserialize<List<VivaAirApiResponse>>(responseStream);
 
-                _logger.LogInformation("|INFO|" + "Los parametros de busqueda son correctos, vuelos encontrados");
-                return respuesta;
-
+                return reply;
 
             }
-            catch (Exception ex)
+            catch
             {
-               _logger.LogError("|ERROR|" + " Los parametros de busqueda no son correctos." + "\n" +
-                    "Parametros recibidos:" + "\n" + "Origen: " + FlightOrigin
-                    + "\n" + "Destino: " + FlightDestination
-                    + "\n" + "Fecha: " + FlightDate + "\n" + ex.Message);
-                throw new Exception("Mensaje de error" + ex.Message);
+                return null;
             }
-
         }
 
+        /**
+        * Method to get flights from externalAPI by method get
+        * It receives three parameters sent from user request,
+        * returns a list with all the flights found
+        **/
         [HttpGet]
         public async Task<IEnumerable<VivaAirApiResponse>> Flight(string origin, string destination, string from)
         {
-
+            try
             {
-                var response = await GetFlightsFromApi(origin, destination, from);
 
+                var response = await GetFlightsFromApi(origin, destination, from);
                 return response;
+            }
+            catch
+            {
+                return null;
             }
         }
     }
