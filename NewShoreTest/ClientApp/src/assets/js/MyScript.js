@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     edge: "left"
   });
 });
+
 function Showsidenav() {
   let elem = querySelector("#slide-out")
   let instance = M.Sidenav.getInstance(elem);

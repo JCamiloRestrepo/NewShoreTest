@@ -17,8 +17,8 @@ namespace NewShoreTest.Controllers
     public class FlightsController : ControllerBase
     {
 
-        private readonly  DataBaseAccessObject.Handler.Interfaces.DataBaseInterface _dataBase;
-        private readonly  ExternalAPIs.VivaAirAPI.Handler.Interface.VivaAirApiInterface _api;
+        private readonly DataBaseAccessObject.Handler.Interfaces.DataBaseInterface _dataBase;
+        private readonly ExternalAPIs.VivaAirAPI.Handler.Interface.VivaAirApiInterface _api;
 
         public FlightsController(DataBaseAccessObject.Handler.Interfaces.DataBaseInterface dataBase,
             ExternalAPIs.VivaAirAPI.Handler.Interface.VivaAirApiInterface api)
@@ -48,6 +48,12 @@ namespace NewShoreTest.Controllers
             }
         }
 
+        [HttpGet("db")]
+        public IEnumerable<FlightModel> GetFlights()
+        {
+            IEnumerable<FlightModel> flight = _dataBase.GetFlights();
+            return flight;
+        }
     }
 }
 

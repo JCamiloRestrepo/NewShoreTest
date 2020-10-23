@@ -23,6 +23,7 @@ export class HomeComponent implements OnInit {
   citiesSettings: IDropdownSettings;
 
   public lstFlight: Flights[] = [];
+  public lstFlightDB: Flights[] = [];
   bandera = false;
 
   constructor(http: HttpClient, @Inject("BASE_URL") baseUrl: string,
@@ -110,6 +111,12 @@ export class HomeComponent implements OnInit {
       alert("El vuelo se guardó exitosamente")
       this.lstFlight = [];
       this.ShowTable(false);
+    });
+  }
+
+  public GetFlightsFromDB() {
+    this.flightService.GetFlightsFromDB().subscribe(data => {
+      this.lstFlightDB = data;
     })
   }
 }

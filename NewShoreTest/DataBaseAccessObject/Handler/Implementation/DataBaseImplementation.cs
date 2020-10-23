@@ -63,5 +63,34 @@ namespace NewShoreTest.DataBaseAccessObject.Handler.Implementation
                 throw new Exception("Mensaje de error " + ex.Message);
             }
         }
+        [HttpGet("db")]
+        public IEnumerable<FlightModel> GetFlights()
+        {
+            try {
+                _logger.LogInformation("|INFO|" + " Buscando vuelos en DB");
+                List<FlightModel> lst = (from d in db.Flights
+                                         select new FlightModel
+                                         {
+                                             Id = d.Id,
+                                             DepartureStation = d.DepartureStation,
+                                             DepartureDate = d.DepartureDate,
+                                             ArrivalStation = d.ArrivalStation,
+                                             FkTransporte = d.FkTransporte,
+                                             Transport = d.Transport,
+                                             Price = d.Price,
+                                             Currency = d.Currency
+                                         }).ToList();
+
+                _logger.LogInformation("|INFO|" + " Los vuelos han sido buscados con exito");
+                return lst;
+            }catch(Exception ex)
+            {
+                _logger.LogError("|ERROR|" + "Los vuelos no puede ser mostrados :");
+                throw new Exception("Mensaje de error " + ex.Message);
+            }
+            }
+
+       
+        
     }
 }

@@ -12,6 +12,9 @@ namespace NewShoreTest.DataBaseAccessObject.Handler.Interfaces
     {
        [HttpPost]
        Task<FlightModel> SaveFlight(VivaAirApiResponse flight);
+
+       [HttpGet("db")]
+       IEnumerable<FlightModel> GetFlights();
         
     }
 }
